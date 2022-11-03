@@ -54,6 +54,24 @@ export function clientCheck() {
   });
   return CLIENT_VAR;
 }
+
+
+
+export function isPC() {
+  var userAgentInfo = navigator.userAgent;
+  var Agents = ["Android", "iPhone",
+    "SymbianOS", "Windows Phone",
+    "iPad", "iPod"];
+  var flagPc = true;
+  for (var v = 0; v < Agents.length; v++) {
+    if (userAgentInfo.indexOf(Agents[v]) > 0) {
+      flagPc = false;
+      break;
+    }
+  }
+  return flagPc;
+}
+
 /**
  * 四舍五入保留num位小数
  * @param v
