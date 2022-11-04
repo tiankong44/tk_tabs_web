@@ -11,7 +11,7 @@
               </el-col>
               <el-col :span="18">
                 <el-row :gutter="20">
-                  <el-col :span=cardSpan v-for="(tab, index) in this.tabList" id="card">
+                  <el-col :span=cardSpan v-for="(tab, index) in this.tabList.records" id="card">
                     <el-card class="box-card" shadow="hover" @click=goTo(tab)>
                       <div @click=goTo(tab)>
                         <el-row>
@@ -44,7 +44,13 @@
             </el-row>
 
           </div>
+          <div class="pageButton">
 
+            <el-pagination layout="prev, pager, next" :total="tabList.total" :background="true"
+              :hide-on-single-page="true" @current-change="handleCurrentChange" @prev-click="prevClick"
+              @next-click="nextClick">
+            </el-pagination>
+          </div>
         </el-main>
       </el-container>
 
@@ -53,20 +59,15 @@
           <el-button icon="el-icon-plus" type="info"></el-button>
         </div>
         <div id="mybutton">
-          <el-button icon="el-icon-edit" type="info"></el-button>
+          <el-button icon="el-icon-lock" type="info"></el-button>
         </div>
         <div id="mybutton">
           <el-button icon="el-icon-edit" type="info"></el-button>
         </div>
         <div id="mybutton">
-          <el-button icon="el-icon-edit" type="info"></el-button>
+          <el-button icon="el-icon-setting" type="info"></el-button>
         </div>
-        <div id="mybutton">
-          <el-button icon="el-icon-edit" type="info"></el-button>
-        </div>
-        <div id="mybutton">
-          <el-button icon="el-icon-edit" type="info"></el-button>
-        </div>
+
       </div>
       <router-view />
     </div>
@@ -99,7 +100,8 @@
         },
         client: "",
         cardSpan: 5,
-        headerHeight: "400px"
+        headerHeight: "400px",
+        pageButtonPadding: "200px"
       }
     },
     //监听属性 类似于data概念
@@ -137,8 +139,7 @@
           .then((res) => {
 
             if (res.code == 0) {
-              this.tabList = res.data.records
-              console.log(this.tabList)
+              this.tabList = res.data
             }
           })
           .catch((error) => {})
@@ -160,12 +161,25 @@
           this.cardSpan = 20
           this.headerHeight = "20px"
           this.page = {
-            current: 1,
-            size: 5,
-            total: 0
-          }
+              current: 1,
+              size: 5,
+              total: 0
+            },
+            this.pageButtonPadding = "20px"
         }
         // if (this.client.)
+      },
+      handleCurrentChange(current) {
+        this.page.current = current
+        this.getPublicTbas()
+      },
+      prevClick(current) {
+        this.page.current = current
+        this.getPublicTbas()
+      },
+      nextClick(current) {
+        this.page.current = current
+        this.getPublicTbas()
       }
 
     },
@@ -224,5 +238,24 @@
     border: 1px solid rgb(0 0 0 / 10%) !important;
     background: url(../static/images/tab-image.png);
     background-size: 100% 100%;
+  }
+
+  .pageButton {
+    padding-top: v-bind('pageButtonPadding');
+
+  }
+
+  .el-pagination.is-background .el-pager li:not(.disabled) {
+    background-color: rgb(0 0 0 / 0%) !important;
+  }
+
+
+  .el-pagination.is-background .btn-prev {
+    background-color: rgb(0 0 0 / 0%) !important;
+
+  }
+
+  .el-pagination.is-background .btn-next {
+    background-color: rgb(0 0 0 / 0%) !important;
   }
 </style>
