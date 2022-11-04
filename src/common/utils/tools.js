@@ -54,6 +54,24 @@ export function clientCheck() {
   });
   return CLIENT_VAR;
 }
+
+
+
+export function isPC() {
+  var userAgentInfo = navigator.userAgent;
+  var Agents = ["Android", "iPhone",
+    "SymbianOS", "Windows Phone",
+    "iPad", "iPod"];
+  var flagPc = true;
+  for (var v = 0; v < Agents.length; v++) {
+    if (userAgentInfo.indexOf(Agents[v]) > 0) {
+      flagPc = false;
+      break;
+    }
+  }
+  return flagPc;
+}
+
 /**
  * 四舍五入保留num位小数
  * @param v
@@ -103,7 +121,7 @@ export function string2Date(str, format) {
  * @param {Object} param [请求参数]
  * @param {String} url [下载链接]
  */
-export function postDownload (param, url) {
+export function postDownload(param, url) {
   let opInfo = {
     ip: "127.0.0.1",
     op_time: "2020-07-08 14:49:39",
@@ -124,7 +142,7 @@ export function postDownload (param, url) {
         reader.onload = (e) => {
           let a = document.createElement("a");
           let fileName = res.headers["content-disposition"].split("attachment;filename=")[1];
-          a.download = decodeURI(fileName); 
+          a.download = decodeURI(fileName);
           a.href = e.target.result;
           document.body.appendChild(a);
           a.click();
@@ -138,5 +156,37 @@ export function postDownload (param, url) {
       }
     );
 };
+
+/**
+ * localStorage存值并设置过期时间
+ * @param {Object} key key
+ * @param {String} value  值
+ *  @param {number} expire 过期时间-单位秒
+ */
+// 存储
+export function setStorage(key, value, expire) {
+  if (isNaN(expire) || expire < 1) {
+    throw new Error('有效期应为一个有效数值')
+  }
+  // 86_400_000一天时间的毫秒数，_是数值分隔符
+  let time = expire * 1000
+  let obj = {
+    data: value,
+    time: Date.now(),
+    storageTime: time
+  }
+  window.localStorage.setItem(key, JSON.stringify(obj))
+}
+
+// 取值
+export function getStorage(key) {
+  let obj = window.localStorage.getItem(key)
+  obj = JSON.parse(obj)
+  if (null == obj || (Date.now() - obj.time > obj.storageTime)) {
+    window.localStorage.removeItem(key);
+    return null
+  }
+  return obj.data
+}
 
 

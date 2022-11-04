@@ -1,35 +1,29 @@
 import Vue from 'vue'
-import Router from 'vue-router'
+import VueRouter from 'vue-router'
+import HomeView from '../views/HomeView.vue'
 
-Vue.use(Router)
-//展示页面
+Vue.use(VueRouter)
 
-const index = () => import("@/components/index/index.vue");
+const routes = [
+  {
+    path: '/',
+    name: 'home',
+    component: HomeView
+  },
+  {
+    path: '/about',
+    name: 'about',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+  }
+]
 
+const router = new VueRouter({
+  mode: 'history',
+  base: process.env.BASE_URL,
+  routes
+})
 
-const originalPush = Router.prototype.push
-
-Router.prototype.push = function push(location) {
-  return originalPush.call(this, location).catch(err => err)
-}
-const router = new Router({
- 
-  //本地
-  mode: "hash",
-  base: "/myblog",
-
-  // 打包
-//   base: "/",
-//  mode: "history",
-
-  routes: [
-    {
-      path: "/index",
-      redirect: '/index',
-      component: index,
-    },
-
-  ],
-});
-
-export default router;
+export default router

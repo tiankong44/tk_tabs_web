@@ -1,14 +1,13 @@
 // 接口请求统一管理
 const tabapi = {
-  // 标签管理
-  insert: '/tk_tabs/tab/insert',
-}
-
-const blogapi = {
-  // 标签管理
-  insert: '/myblog/tab/insert',
+    getPublicTbas: "/tabs/tab/listPublic"
+};
+const systemapi = {
 
 };
-
+const commonapi = {
+    getBackgroundImage: "/tabs/common/getBackgroundImage"
+};
 export { tabapi };
-export { blogapi };
+export { systemapi };
+export { commonapi };
