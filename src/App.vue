@@ -44,11 +44,12 @@
             </el-row>
 
           </div>
+
           <div class="pageButton">
 
-            <el-pagination layout="prev, pager, next" :total="tabList.total" :background="true"
-              :hide-on-single-page="true" @current-change="handleCurrentChange" @prev-click="prevClick"
-              @next-click="nextClick">
+            <el-pagination layout="prev, pager, next" :total="tabList.total" :background="true" :page-size="tabList.size"
+              :page-count="tabList.pages" :hide-on-single-page="true" @current-change="handleCurrentChange"
+              @prev-click="prevClick" @next-click="nextClick">
             </el-pagination>
           </div>
         </el-main>
@@ -162,7 +163,7 @@
           this.headerHeight = "20px"
           this.page = {
               current: 1,
-              size: 5,
+              size: 4,
               total: 0
             },
             this.pageButtonPadding = "20px"
