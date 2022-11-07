@@ -6,39 +6,33 @@
         <el-main>
           <div id="list">
             <el-row>
-              <el-col :span="5" style="min-height:1px;">
-                <div></div>
-              </el-col>
-              <el-col :span="18">
-                <el-row :gutter="20">
-                  <el-col :span=cardSpan v-for="(tab, index) in this.tabList.records" id="card">
-                    <el-card class="box-card" shadow="hover" @click=goTo(tab)>
-                      <div @click=goTo(tab)>
-                        <el-row>
-                          <el-col :span="8">
-                            <div>
-                              <el-avatar :src=tab.icon :key="index" :size="50"></el-avatar>
-                            </div>
-
-                          </el-col>
-                          <el-col :span="12">
-                            <div style="height: 3em;line-height: 3em;overflow: hidden; color:white;font-size: large;">
-                              {{tab.name}}</div>
-                          </el-col>
-                          <el-col :span="4">
-                            <i class="el-icon-position" style="padding-top: 5px; color:white; font-size: 40px;"></i>
-                          </el-col>
-                        </el-row>
+              <el-col :span="16" :offset="5">
+                <!-- <div v-for="item in rowNum">
+                  <el-row>
+                    <el-col :span=cardSpan v-for="(tab, index) in  tabList.records" id="card">
+                      <div id="avatar" class="avatar" @click=" goTo(tab)" @mouseover="mouseOver(index)"
+                        @mouseleave="mouseLeave(index)" v-if="isShow(item,index)"  style="height: 100px;">
+                        <el-avatar :size="avatarSaize" :src="tab.icon" :class="isactive == index ? 'addclass' : '' ">
+                        </el-avatar>
                       </div>
 
+                    </el-col>
+                  </el-row>
+                </div> -->
+                <el-row>
+                  <el-col :span=cardSpan v-for="(tab, index) in  this.tabList.records" id="card">
+                    <div id="avatar" class="avatar" @click=" goTo(tab)" @mouseover="mouseOver(index)"
+                      @mouseleave="mouseLeave(index)" style="height: 130px;">
+                      <el-avatar :size="avatarSaize" :src="tab.icon" :class="isactive == index ? 'addclass' : '' ">
+                      </el-avatar>
+                      <div style="color:white">{{tab.name}}</div>
+                    </div>
 
-
-                    </el-card>
                   </el-col>
-
                 </el-row>
+
               </el-col>
-              <el-col :span="2" style="min-height:1px;">
+              <el-col :span="3" style="min-height:1px;">
                 <div></div>
               </el-col>
             </el-row>
@@ -47,9 +41,9 @@
 
           <div class="pageButton">
 
-            <el-pagination layout="prev, pager, next" :total="tabList.total" :background="true" :page-size="tabList.size"
-              :page-count="tabList.pages" :hide-on-single-page="true" @current-change="handleCurrentChange"
-              @prev-click="prevClick" @next-click="nextClick">
+            <el-pagination layout="prev, pager, next" :total="tabList.total" :background="true"
+              :page-size="tabList.size" :page-count="tabList.pages" :hide-on-single-page="true"
+              @current-change="handleCurrentChange" @prev-click="prevClick" @next-click="nextClick">
             </el-pagination>
           </div>
         </el-main>
@@ -57,7 +51,10 @@
 
       <div id="button-group">
         <div class="mybutton" id="mybutton">
-          <el-button icon="el-icon-plus" type="info"></el-button>
+          <el-button icon="el-icon-plus" type="info" @click="dialogVisible = true"></el-button>
+        </div>
+        <div id="mybutton">
+          <el-button icon="el-icon-shopping-bag-2" type="info"></el-button>
         </div>
         <div id="mybutton">
           <el-button icon="el-icon-lock" type="info"></el-button>
@@ -70,6 +67,12 @@
         </div>
 
       </div>
+
+      <el-dialog :title="dialog" :visible.sync="dialogVisible" width="60%" height="60%" :append-to-body="true"
+        :destroy-on-close="true">
+        <addTabView></addTabView>
+      </el-dialog>
+
       <router-view />
     </div>
   </div>
@@ -83,11 +86,14 @@
     setStorage,
     isPC
   } from '@/common/utils/tools.js'
+  import addTabView from '@/views/tabs/addView'
   export default {
 
 
     //import引入的组件需要注入到对象中才能使用
-    components: {},
+    components: {
+      addTabView
+    },
     data() {
       //这里存放数据
       return {
@@ -96,13 +102,18 @@
         tabList: [],
         page: {
           current: 1,
-          size: 8,
+          size: 12,
           total: 0
         },
         client: "",
-        cardSpan: 5,
+        cardSpan: 4,
         headerHeight: "400px",
-        pageButtonPadding: "200px"
+        pageButtonPadding: "200px",
+        avatarSaize: 60,
+        isactive: -1,
+        rowNum: 2,
+        dialogVisible: false,
+        dialog: ""
       }
     },
     //监听属性 类似于data概念
@@ -156,17 +167,18 @@
         }
       },
       clientTransfrom() {
-        if (isPC()) {
-          this.cardSpan = 5
-        } else {
-          this.cardSpan = 20
+        if (isPC()) {} else {
+          this.cardSpan = 8
           this.headerHeight = "20px"
           this.page = {
               current: 1,
-              size: 4,
+              size: 15,
               total: 0
             },
-            this.pageButtonPadding = "20px"
+            this.pageButtonPadding = "20px",
+            this.avatarSaize = 50
+          this.rowNum = 6
+
         }
         // if (this.client.)
       },
@@ -181,7 +193,17 @@
       nextClick(current) {
         this.page.current = current
         this.getPublicTbas()
-      }
+      },
+      // 移入
+      mouseOver(index) {
+
+        this.isactive = index
+      },
+      // 移出
+      mouseLeave(index) {
+
+        this.isactive = -1
+      },
 
     },
     mounted() {
@@ -231,16 +253,6 @@
 
   }
 
-  #card {
-    padding-top: 20px;
-  }
-
-  .el-card {
-    border: 1px solid rgb(0 0 0 / 10%) !important;
-    background: url(../static/images/tab-image.png);
-    background-size: 100% 100%;
-  }
-
   .pageButton {
     padding-top: v-bind('pageButtonPadding');
 
@@ -258,5 +270,16 @@
 
   .el-pagination.is-background .btn-next {
     background-color: rgb(0 0 0 / 0%) !important;
+  }
+
+  // .avatar {
+  //   padding-top: 30px;
+
+  // }
+
+  .addclass {
+    height: 65px !important;
+    width: 65px !important;
+    line-height: 65px !important;
   }
 </style>
