@@ -37,7 +37,7 @@
                         </el-col>
                         <el-col :span="5">
                             <div class="textCenter">
-                                <el-upload class="upload-demo" action="http://localhost:9001/tabs/common/uploadIcon"
+                                <el-upload class="upload-demo" action="/tabs/common/uploadIcon"
                                     :multiple="false" :on-success="handleAvatarSuccess" :show-file-list="false">
                                     <el-button size="small" type="primary">点击上传</el-button>
                                 </el-upload>
