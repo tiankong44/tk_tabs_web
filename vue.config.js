@@ -5,7 +5,7 @@ module.exports = {
     devServer: {
       proxy: {
         '/tabs': {
-          target: 'http://localhost:9100', //路径指向本地主机地址及端口号
+          target: 'http://localhost:9001', //路径指向本地主机地址及端口号
           ws: true,
           changeOrigin: true,
           pathRewrite:{

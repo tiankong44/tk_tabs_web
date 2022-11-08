@@ -7,23 +7,11 @@
           <div id="list">
             <el-row>
               <el-col :span="16" :offset="5">
-                <!-- <div v-for="item in rowNum">
-                  <el-row>
-                    <el-col :span=cardSpan v-for="(tab, index) in  tabList.records" id="card">
-                      <div id="avatar" class="avatar" @click=" goTo(tab)" @mouseover="mouseOver(index)"
-                        @mouseleave="mouseLeave(index)" v-if="isShow(item,index)"  style="height: 100px;">
-                        <el-avatar :size="avatarSaize" :src="tab.icon" :class="isactive == index ? 'addclass' : '' ">
-                        </el-avatar>
-                      </div>
-
-                    </el-col>
-                  </el-row>
-                </div> -->
                 <el-row>
                   <el-col :span=cardSpan v-for="(tab, index) in  this.tabList.records" id="card">
                     <div id="avatar" class="avatar" @click=" goTo(tab)" @mouseover="mouseOver(index)"
                       @mouseleave="mouseLeave(index)" style="height: 130px;">
-                      <el-avatar :size="avatarSaize" :src="tab.icon" :class="isactive == index ? 'addclass' : '' ">
+                      <el-avatar  draggable="true" :size="avatarSaize" :src="tab.icon" :class="isactive == index ? 'addclass' : '' ">
                       </el-avatar>
                       <div style="color:white">{{tab.name}}</div>
                     </div>
@@ -111,9 +99,10 @@
         pageButtonPadding: "200px",
         avatarSaize: 60,
         isactive: -1,
-        rowNum: 2,
+
         dialogVisible: false,
-        dialog: ""
+        dialog: "",
+        client: "pc"
       }
     },
     //监听属性 类似于data概念
@@ -131,8 +120,17 @@
       getBackGroundUrl(key) {
         var url = getStorage(key)
         if (!url) {
+          var api = this.commonapi.getBackgroundImage
+          if (this.client == 'pc') {
+            api = api + '?clientType=1'
+          } else if (this.client == 'mobile') {
+            api = api + '?clientType=2'
+          } else {
+            api = api + '?clientType=1'
+          }
+
           this.request
-            .postJson(this.commonapi.getBackgroundImage)
+            .postJson(api)
             .then((res) => {
               if (res.code == 0) {
                 this.backgroundUrl = res.data
@@ -172,12 +170,13 @@
           this.headerHeight = "20px"
           this.page = {
               current: 1,
-              size: 15,
+              size: 12,
               total: 0
             },
             this.pageButtonPadding = "20px",
             this.avatarSaize = 50
-          this.rowNum = 6
+
+          this.client = "mobile"
 
         }
         // if (this.client.)
@@ -254,7 +253,11 @@
   }
 
   .pageButton {
-    padding-top: v-bind('pageButtonPadding');
+    position: absolute;
+    bottom: 5%;
+    left: 0;
+    right: 0;
+    margin: auto // text-align: center;
 
   }
 
