@@ -6,8 +6,13 @@ const systemapi = {
 
 };
 const commonapi = {
-    getBackgroundImage: "/tabs/common/getBackgroundImage"
+    getBackgroundImage: "/tabs/common/getBackgroundImage",
+    uploadIcon: "/tabs/common/uploadIcon"
+};
+const appapi = {
+    getAppList: "/tabs/app/getAppList"
 };
 export { tabapi };
 export { systemapi };
 export { commonapi };
+export { appapi };

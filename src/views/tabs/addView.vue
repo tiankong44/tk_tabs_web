@@ -30,16 +30,15 @@
                         </el-col>
                         <el-col :span="7">
                             <div class="textCenter">
-                                <el-avatar :size="60"
-                                    src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png">
+                                <el-avatar :size="60" :src="iconUrl">
                                 </el-avatar>
                             </div>
 
                         </el-col>
                         <el-col :span="5">
                             <div class="textCenter">
-                                <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/"
-                                    :multiple="false">
+                                <el-upload class="upload-demo" action="http://localhost:9001/tabs/common/uploadIcon"
+                                    :multiple="false" :on-success="handleAvatarSuccess" :show-file-list="false">
                                     <el-button size="small" type="primary">点击上传</el-button>
                                 </el-upload>
                             </div>
@@ -140,6 +139,10 @@
     //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
     //例如：import 《组件名称》 from '《组件路径》';
 
+    import {
+        Icon
+    } from 'element-ui';
+
     export default {
         //import引入的组件需要注入到对象中才能使用
         components: {},
@@ -156,6 +159,8 @@
                     published: true,
                     tagValues: []
                 },
+                iconUrl: "https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png",
+                appList: []
             };
         },
         //监听属性 类似于data概念
@@ -164,11 +169,25 @@
         watch: {},
         //方法集合
         methods: {
-
+            handleAvatarSuccess(res, file) {
+                this.iconUrl = res.data;
+            },
+            getAppList() {
+                this.request
+                    .postJson(this.appapi.getAppList)
+                    .then((res) => {
+                        if (res.code == 0) {
+                            this.appList = res.appList
+                        } else if (res.code == 1) {
+                            _tiper.error(res.desc)
+                        }
+                    })
+                    .catch((error) => {})
+            }
         },
         //生命周期 - 创建完成（可以访问当前this实例）
         created() {
-
+            this.getAppList()
         },
         //生命周期 - 挂载完成（可以访问DOM元素）
         mounted() {
