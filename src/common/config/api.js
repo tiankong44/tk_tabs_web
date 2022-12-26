@@ -1,6 +1,7 @@
 // 接口请求统一管理
 const tabapi = {
   getPublicTbas: "/tabs/tab/listPublic",
+  addTab: "/tabs/tab/addTab",
 };
 const systemapi = {};
 const commonapi = {
