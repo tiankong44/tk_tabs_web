@@ -42,26 +42,24 @@
           <el-button icon="el-icon-plus" type="info" @click="dialogChange(viewIndexArr[0])">
           </el-button>
         </div>
-        <!-- <div id="mybutton">
-          <el-button icon="el-icon-shopping-bag-2" type="info" @click="dialogChange(viewIndexArr[1])"></el-button>
-        </div> -->
+
         <div id="mybutton">
           <el-button icon="el-icon-lock" type="info" @click="toIndividual()"></el-button>
         </div>
-        <!-- <div id="mybutton">
-          <el-button icon="el-icon-edit" type="info"></el-button>
-        </div> -->
+
         <div id="mybutton">
-          <el-button icon="el-icon-setting" type="info"></el-button>
+          <el-button icon="el-icon-setting" type="info" @click="dialogChange(viewIndexArr[1])"></el-button>
         </div>
       </div>
 
-      <el-dialog :title="dialog" :visible.sync="dialogVisible" width="60%" height="60%" :append-to-body="true"
+      <el-dialog :title="dialog" :visible.sync="dialogVisible" :width="dialogWidth" height="60%" :append-to-body="true"
         :destroy-on-close="true">
         <addTabView v-if="viewIndex==viewIndexArr[0]" @closeDialog="closeDialog()" @getPublicTbas="getPublicTbas()">
         </addTabView>
-
+        <setting v-if="viewIndex==viewIndexArr[1]" @closeDialog="closeDialog()">
+        </setting>
       </el-dialog>
+
     </div>
   </div>
 </template>
@@ -72,12 +70,13 @@
     isPC
   } from "@/common/utils/tools.js";
   import addTabView from "@/views/tabs/addView";
-  import password from "@/views/lock/password";
+
+  import setting from "@/views/setting/setting";
   export default {
     //import引入的组件需要注入到对象中才能使用
     components: {
       addTabView,
-      password,
+      setting
     },
     data() {
       //这里存放数据
@@ -95,12 +94,13 @@
         pageButtonPadding: "200px",
         avatarSaize: 60,
         isactive: -1,
+        dialogWidth: "60%",
 
         dialogVisible: false,
         dialog: "",
         client: "pc",
         flagPc: false,
-        viewIndexArr: ["tabAdd", "lock", "editTab", "setting"],
+        viewIndexArr: ["tabAdd", "setting"],
         viewIndex: ""
       };
 
@@ -121,6 +121,17 @@
         this.dialogVisible = false;
       },
       dialogChange(index) {
+        // console.log(index)
+        // if (this.viewIndexArr[0] == index) {
+        //   this.dialogWidth = "60%"
+        // } else if (this.viewIndexArr[1] == index) {
+
+        //   if (this.flagPc) {
+        //     this.dialogWidth = "40%"
+        //   } else {
+        //     this.dialogWidth = "80%"
+        //   }
+        // }
         this.dialogVisible = true;
         this.viewIndex = index
       },
@@ -187,6 +198,7 @@
           this.flagPc = false;
           this.cardSpan = 8;
           this.headerHeight = "20px";
+          this.dialogWidth = "80%";
           (this.page = {
             current: 1,
             size: 12,
