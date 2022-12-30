@@ -11,7 +11,7 @@
                   <el-col :span="cardSpan" v-for="(tab, index) in this.tabList.records" id="card">
                     <div id="avatar" class="avatar" @click="goTo(tab)" @mouseover="mouseOver(index)"
                       @mouseleave="mouseLeave(index)" style="height: 130px">
-                      <el-avatar draggable="true" :size="avatarSaize" :src="tab.icon"  
+                      <el-avatar draggable="true" :size="avatarSaize" :src="tab.icon"
                         :class="isactive == index ? 'addclass' : ''">
                       </el-avatar>
                       <div style="color: white">{{ tab.name }}</div>
@@ -35,6 +35,9 @@
       </el-container>
 
       <div id="button-group">
+        <div id="mybutton">
+          <el-button icon="el-icon-s-grid" type="info" @click="toIndex()"></el-button>
+        </div>
         <div class="mybutton" id="mybutton" v-if="flagPc">
           <el-button icon="el-icon-plus" type="info" @click="dialogChange(viewIndexArr[0])">
           </el-button>
@@ -43,7 +46,7 @@
           <el-button icon="el-icon-shopping-bag-2" type="info" @click="dialogChange(viewIndexArr[1])"></el-button>
         </div> -->
         <div id="mybutton">
-          <el-button icon="el-icon-lock" type="info" @click="dialogChange(viewIndexArr[1])"></el-button>
+          <el-button icon="el-icon-lock" type="info" @click="toIndividual()"></el-button>
         </div>
         <div id="mybutton">
           <el-button icon="el-icon-edit" type="info"></el-button>
@@ -57,8 +60,7 @@
         :destroy-on-close="true">
         <addTabView v-if="viewIndex==viewIndexArr[0]" @closeDialog="closeDialog()" @getPublicTbas="getPublicTbas()">
         </addTabView>
-        <password v-if="viewIndex==viewIndexArr[1]" @closeDialog="closeDialog()">
-        </password>
+
       </el-dialog>
     </div>
   </div>
@@ -120,8 +122,15 @@
       },
       dialogChange(index) {
         this.dialogVisible = true;
-        console.log(index)
         this.viewIndex = index
+      },
+      toIndividual() {
+        this.$router.push({
+          name: 'individual'
+        })
+      },
+      toIndex() {
+        location.reload()
       },
       getBackGroundUrl(key) {
         var url = getStorage(key);

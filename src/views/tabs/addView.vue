@@ -181,7 +181,7 @@
             if (res.code == 0) {
               this.appList = res.data;
             } else if (res.code == 1) {
-              _tiper.error(res.desc);
+              _tiper.error(res.message);
             }
           })
           .catch((error) => {});

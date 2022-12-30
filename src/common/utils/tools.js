@@ -189,4 +189,6 @@ export function getStorage(key) {
   return obj.data
 }
 
-
+export function delStorage(key) {
+    window.localStorage.removeItem(key);
+}
