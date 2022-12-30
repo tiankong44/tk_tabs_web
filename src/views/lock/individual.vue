@@ -68,9 +68,9 @@
                 <div id="mybutton">
                     <el-button icon="el-icon-lock" type="info" @click="toIndividual()"></el-button>
                 </div>
-                <div id="mybutton">
+                <!-- <div id="mybutton">
                     <el-button icon="el-icon-edit" type="info"></el-button>
-                </div>
+                </div> -->
                 <div id="mybutton">
                     <el-button icon="el-icon-setting" type="info"></el-button>
                 </div>
